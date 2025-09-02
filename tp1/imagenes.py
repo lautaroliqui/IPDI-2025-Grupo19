@@ -1,23 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import imageio
+import os
 
-def MostrarImagen():
-    img = imageio.imread('C:\\Users\\epere\\PROGRAMACION\\Introduccion a Imagenes\\imagenes\\titocaldern-zq4a.png')  #Direccion de imagen
+IMAGEN_PATH = os.path.join(".\\IPDI-2025-Grupo19\\tp1\\imagenes", "titocaldern-zq4a.png")
+
+def mostrarImagen(imagen):
+    img = imageio.imread(imagen)
     plt.imshow(img)
     plt.axis('off')
     plt.show()
 
-def ModificarImagen():
-    img = imageio.imread('C:\\Users\\epere\\PROGRAMACION\\Introduccion a Imagenes\\imagenes\\titocaldern-zq4a.png')
+def guardarImagen(imagen, nombre_archivo):
+    imageio.imwrite(nombre_archivo, imagen)
+
+def modificarImagen(imagen):
+    img = imageio.imread(imagen)
     modificada = img.copy()
     modificada[:, :, 0] = np.clip(modificada[:, :, 0] + 100, 0, 255)
+    guardarImagen(modificada, ".\\IPDI-2025-Grupo19\\tp1\\imagenes\\imagen_modificada.png")
     plt.imshow(modificada)
     plt.axis('off')
     plt.show()
 
-def MostrarComponentes():
-    img = imageio.imread('C:\\Users\\epere\\PROGRAMACION\\Introduccion a Imagenes\\imagenes\\titocaldern-zq4a.png')
+def mostrarComponentes(imagen):
+    img = imageio.imread(imagen)
     rojo = img[:, :, 0]
     verde = img[:, :, 1]
     azul = img[:, :, 2]
@@ -36,8 +43,8 @@ def MostrarComponentes():
     axs[3].axis('off')
     plt.show()
 
-def AumentarBrilloCanalRojo():
-    img = imageio.imread('C:\\Users\\epere\\PROGRAMACION\\Introduccion a Imagenes\\imagenes\\titocaldern-zq4a.png')
+def aumentarBrilloCanalRojo(imagen):
+    img = imageio.imread(imagen)
     fig, ax = plt.subplots()
     modificada = img.copy()
     modificada[:, :, 0] = np.clip(modificada[:, :, 0] + 80, 0, 255)
@@ -46,3 +53,4 @@ def AumentarBrilloCanalRojo():
     plt.axis('off')
     plt.show()
 
+modificarImagen(IMAGEN_PATH)
