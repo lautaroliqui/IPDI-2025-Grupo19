@@ -8,6 +8,9 @@ from tkinter import filedialog
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+# Codigo de Ejercicio 3
+import Complementos.ejercicio3 as ej3
+
 class ProcesadorImagenesGUI:
     def __init__(self, master):
         self.master = master
@@ -31,6 +34,13 @@ class ProcesadorImagenesGUI:
 
         self.btn_mostrar = tk.Button(master, text="Restar Imagenes (mismas dimensiones)", command=self.restar_imagenes)
         self.btn_mostrar.pack()
+
+        # Botones para ejercicio 3
+        self.btn_producto = tk.Button(master, text="Multiplicar Imágenes", command=self.multiplicar_imagenes)
+        self.btn_producto.pack()
+
+        self.btn_cociente = tk.Button(master, text="Dividir Imágenes", command=self.dividir_imagenes)
+        self.btn_cociente.pack()
 
     def abrir_imagen1(self):
         ruta_archivo = filedialog.askopenfilename()
@@ -82,6 +92,39 @@ class ProcesadorImagenesGUI:
             plt.show()
         else:
             print("Las imágenes no tienen las mismas dimensiones")
+
+    # Funciones para el ejercicio 3
+    def multiplicar_imagenes(self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            if self.imagen1.shape == self.imagen2.shape:
+                # Llama a la función 'producto' del otro archivo
+                resultado = ej3.producto(self.imagen1, self.imagen2)
+                if resultado is not None:
+                    plt.imshow(resultado.astype(np.uint8))
+                    plt.title("Producto de Imágenes")
+                    plt.axis('off')
+                    plt.show()
+            else:
+                print("Las imágenes deben tener las mismas dimensiones.")
+        else:
+            print("Cargue ambas imágenes primero.")
+
+    def dividir_imagenes(self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            if self.imagen1.shape == self.imagen2.shape:
+                # Llama a la función 'cociente' del otro archivo
+                resultado = ej3.cociente(self.imagen1, self.imagen2)
+                if resultado is not None:
+                    # Normaliza el resultado del cociente para la visualización
+                    resultado_normalizado = (resultado - resultado.min()) / (resultado.max() - resultado.min())
+                    plt.imshow(resultado_normalizado)
+                    plt.title("Cociente de Imágenes")
+                    plt.axis('off')
+                    plt.show()
+            else:
+                print("Las imágenes deben tener las mismas dimensiones.")
+        else:
+            print("Cargue ambas imágenes primero.")
 
 root = tk.Tk()
 app = ProcesadorImagenesGUI(root)
