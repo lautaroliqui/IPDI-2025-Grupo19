@@ -92,6 +92,13 @@ class ProcesadorImagenesGUI:
         self.btn_abrir2 = tk.Button(frame_cargar, text="Abrir Imagen 2", command=self.abrir_imagen2)
         self.btn_abrir2.pack(side=tk.LEFT, padx=5)
 
+        self.fig, (self.ax1, self.ax2) = plt.subplots(1, 2, figsize=(8, 4))
+        self.canvas = FigureCanvasTkAgg(self.fig, master=master)
+        self.canvas_widget = self.canvas.get_tk_widget()
+        self.canvas_widget.pack()
+        self.ax1.axis('off')
+        self.ax2.axis('off')
+
         frame_rgb = tk.LabelFrame(master, text="Suma y Resta Clampeada (Misma Dimensión)")
         frame_rgb.pack(padx=10, pady=10, fill="x")
 
@@ -121,12 +128,18 @@ class ProcesadorImagenesGUI:
         self.btn_if_lighter = tk.Button(frame_extra, text="'If-lighter'", command=self.if_lighter_op).grid(row=0, column=1, padx=5, pady=5)
         # self.btn_if_lighter.pack()
 
+    # En la clase ProcesadorImagenesGUI
     def abrir_imagen1(self):
         ruta_archivo = filedialog.askopenfilename()
         if ruta_archivo:
             try:
                 self.imagen1 = imageio.imread(ruta_archivo)
                 print(f"Imagen cargada desde: {ruta_archivo}")
+                self.ax1.clear()
+                self.ax1.imshow(self.imagen1)
+                self.ax1.set_title("Imagen 1")
+                self.ax1.axis('off')
+                self.canvas.draw()
             except Exception as e:
                 print(f"Error al cargar la imagen: {e}")
 
@@ -136,9 +149,14 @@ class ProcesadorImagenesGUI:
             try:
                 self.imagen2 = imageio.imread(ruta_archivo)
                 print(f"Imagen cargada desde: {ruta_archivo}")
+                self.ax2.clear()
+                self.ax2.imshow(self.imagen2)
+                self.ax2.set_title("Imagen 2")
+                self.ax2.axis('off')
+                self.canvas.draw()
             except Exception as e:
                 print(f"Error al cargar la imagen: {e}")
-
+                
     def mostrar_imagenes(self):
         if self.imagen1 is not None and self.imagen2 is not None:
             fig, axs = plt.subplots(1, 2, figsize=(12, 4))
@@ -220,7 +238,7 @@ class ProcesadorImagenesGUI:
         if self.imagen1 is not None and self.imagen2 is not None:
             if self.imagen1.shape == self.imagen2.shape:
                 # Llama a la función 'resta_valor_absoluto' del otro archivo
-                resultado = ej4.resta_valor_absoluto(self.imagen1, self.imagen2)
+                resultado = resta_valor_absoluto(self.imagen1, self.imagen2)
                 if resultado is not None:
                     plt.imshow(resultado)
                     plt.title("Resta con Valor Absoluto")
