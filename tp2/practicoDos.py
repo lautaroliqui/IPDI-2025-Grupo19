@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
-from PIL import Image
 import os
 import tkinter as tk
 from tkinter import filedialog
@@ -38,6 +37,44 @@ def resta_imagenes(img1, img2, titulo):
     else:
         print("Las imágenes deben tener las mismas dimensiones.")
 
+# Ejercicio 4
+
+def resta_valor_absoluto(img1, img2):
+    # Asegurarse de que las imágenes tengan las mismas dimensiones
+    if img1.shape == img2.shape:
+        # Calcular la resta y luego el valor absoluto
+        diferencia = np.abs(img1.astype(np.int32) - img2.astype(np.int32))
+        return diferencia.astype(np.uint8)
+    else:
+        print("Las imágenes deben tener las mismas dimensiones.")
+        return None
+
+# Ejercicio 5
+
+def if_darker(img1, img2):
+    """
+    Compara dos imágenes píxel a píxel y devuelve la más oscura.
+    """
+    if img1.shape != img2.shape:
+        print("Las imágenes deben tener las mismas dimensiones.")
+        return None
+    
+    # np.minimum compara los elementos de dos arrays y devuelve el mínimo
+    resultado = np.minimum(img1, img2)
+    return resultado
+
+def if_lighter(img1, img2):
+    """
+    Compara dos imágenes píxel a píxel y devuelve la más clara.
+    """
+    if img1.shape != img2.shape:
+        print("Las imágenes deben tener las mismas dimensiones.")
+        return None
+    
+    # np.maximum compara los elementos de dos arrays y devuelve el máximo
+    resultado = np.maximum(img1, img2)
+    return resultado
+
 class ProcesadorImagenesGUI:
     def __init__(self, master):
         self.master = master
@@ -67,11 +104,22 @@ class ProcesadorImagenesGUI:
         tk.Button(frame_yiq, text="Sumar", command=self.sumar_imagenes_yiq).grid(row=0, column=0, padx=5, pady=5)
         tk.Button(frame_yiq, text="Restar", command=self.restar_imagenes_yiq).grid(row=0, column=1, padx=5, pady=5)
 
-        frame_extra = tk.LabelFrame(master, text="Operaciones Extra")
+        frame_extra = tk.LabelFrame(master, text="Operaciones Extras")
         frame_extra.pack(padx=10, pady=10, fill="x")
 
         tk.Button(frame_extra, text="Multiplicar", command=self.multiplicar_imagenes).grid(row=0, column=0, padx=5, pady=5)
         tk.Button(frame_extra, text="Dividir", command=self.dividir_imagenes).grid(row=0, column=1, padx=5, pady=5)
+
+        tk.Button(frame_extra, text="Resta Absoluta", command=self.resta_absoluta).grid(row=0, column=2, padx=5, pady=5)
+
+        frame_extra = tk.LabelFrame(master, text="Operaciones If-darker y If-lighter")
+        frame_extra.pack(padx=10, pady=10, fill="x")
+
+        self.btn_if_darker = tk.Button(frame_extra, text="'If-darker'", command=self.if_darker_op).grid(row=0, column=0, padx=5, pady=5)
+        # self.btn_if_darker.pack()
+
+        self.btn_if_lighter = tk.Button(frame_extra, text="'If-lighter'", command=self.if_lighter_op).grid(row=0, column=1, padx=5, pady=5)
+        # self.btn_if_lighter.pack()
 
     def abrir_imagen1(self):
         ruta_archivo = filedialog.askopenfilename()
@@ -167,6 +215,44 @@ class ProcesadorImagenesGUI:
         else:
             print("Cargue ambas imágenes primero.")
 
+    # Funciones para el ejercicio 4
+    def resta_absoluta(self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            if self.imagen1.shape == self.imagen2.shape:
+                # Llama a la función 'resta_valor_absoluto' del otro archivo
+                resultado = ej4.resta_valor_absoluto(self.imagen1, self.imagen2)
+                if resultado is not None:
+                    plt.imshow(resultado)
+                    plt.title("Resta con Valor Absoluto")
+                    plt.axis('off')
+                    plt.show()
+            else:
+                print("Las imágenes deben tener las mismas dimensiones.")
+        else:
+            print("Cargue ambas imágenes primero.")
+    
+    # Funciones para el ejercicio 5
+    def if_darker_op(self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            resultado = if_darker(self.imagen1, self.imagen2)
+            if resultado is not None:
+                plt.imshow(resultado)
+                plt.title("Operación 'If-darker'")
+                plt.axis('off')
+                plt.show()
+        else:
+            print("Cargue ambas imágenes primero.")
+
+    def if_lighter_op(self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            resultado = if_lighter(self.imagen1, self.imagen2)
+            if resultado is not None:
+                plt.imshow(resultado)
+                plt.title("Operación 'If-lighter'")
+                plt.axis('off')
+                plt.show()
+        else:
+            print("Cargue ambas imágenes primero.")
 
 
 root = tk.Tk()
