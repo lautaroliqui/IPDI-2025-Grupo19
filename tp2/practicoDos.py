@@ -26,7 +26,7 @@ def suma_imagenes(img1, img2, titulo):
         plt.axis('off')
         plt.show()
     else:
-        print("Las imágenes no tienen las mismas dimensiones")
+        print("Las imágenes deben tener las mismas dimensiones.")
 
 def resta_imagenes(img1, img2, titulo):
     if img1.shape == img2.shape:
@@ -36,7 +36,7 @@ def resta_imagenes(img1, img2, titulo):
         plt.axis('off')
         plt.show()
     else:
-        print("Las imágenes no tienen las mismas dimensiones")
+        print("Las imágenes deben tener las mismas dimensiones.")
 
 class ProcesadorImagenesGUI:
     def __init__(self, master):
@@ -46,36 +46,32 @@ class ProcesadorImagenesGUI:
         self.imagen1 = None
         self.imagen2 = None
 
-        # Botones
-        self.btn_abrir = tk.Button(master, text="Abrir Imagen 1", command=self.abrir_imagen1)
-        self.btn_abrir.pack()
-        
-        self.btn_abrir = tk.Button(master, text="Abrir Imagen 2", command=self.abrir_imagen2)
-        self.btn_abrir.pack()
+        frame_cargar = tk.LabelFrame(master, text="Cargar Imágenes")
+        frame_cargar.pack(padx=10, pady=10, fill="x")
 
-        self.btn_mostrar = tk.Button(master, text="Mostrar Imagenes", command=self.mostrar_imagenes)
-        self.btn_mostrar.pack()
+        self.btn_abrir1 = tk.Button(frame_cargar, text="Abrir Imagen 1", command=self.abrir_imagen1)
+        self.btn_abrir1.pack(side=tk.LEFT, padx=5)
 
-        # Botones para el ejercicio 1
-        self.btn_mostrar = tk.Button(master, text="Sumar Imagenes (mismas dimensiones)", command=self.sumar_imagenes)
-        self.btn_mostrar.pack()
+        self.btn_abrir2 = tk.Button(frame_cargar, text="Abrir Imagen 2", command=self.abrir_imagen2)
+        self.btn_abrir2.pack(side=tk.LEFT, padx=5)
 
-        self.btn_mostrar = tk.Button(master, text="Restar Imagenes (mismas dimensiones)", command=self.restar_imagenes)
-        self.btn_mostrar.pack()
+        frame_rgb = tk.LabelFrame(master, text="Suma y Resta Clampeada (Misma Dimensión)")
+        frame_rgb.pack(padx=10, pady=10, fill="x")
 
-        # Botones para el ejercicio 2
-        self.btn_mostrar = tk.Button(master, text="Sumar Imagenes YIQ", command=self.sumar_imagenes_yiq)
-        self.btn_mostrar.pack()
+        tk.Button(frame_rgb, text="Sumar", command=self.sumar_imagenes).grid(row=0, column=0, padx=5, pady=5)
+        tk.Button(frame_rgb, text="Restar", command=self.restar_imagenes).grid(row=0, column=1, padx=5, pady=5)
 
-        self.btn_mostrar = tk.Button(master, text="Restar Imagenes YIQ", command=self.restar_imagenes_yiq)
-        self.btn_mostrar.pack()
+        frame_yiq = tk.LabelFrame(master, text="Suma y Resta Clampeada YIQ")
+        frame_yiq.pack(padx=10, pady=10, fill="x")
 
-        # Botones para ejercicio 3
-        self.btn_producto = tk.Button(master, text="Multiplicar Imágenes", command=self.multiplicar_imagenes)
-        self.btn_producto.pack()
+        tk.Button(frame_yiq, text="Sumar", command=self.sumar_imagenes_yiq).grid(row=0, column=0, padx=5, pady=5)
+        tk.Button(frame_yiq, text="Restar", command=self.restar_imagenes_yiq).grid(row=0, column=1, padx=5, pady=5)
 
-        self.btn_cociente = tk.Button(master, text="Dividir Imágenes", command=self.dividir_imagenes)
-        self.btn_cociente.pack()
+        frame_extra = tk.LabelFrame(master, text="Operaciones Extra")
+        frame_extra.pack(padx=10, pady=10, fill="x")
+
+        tk.Button(frame_extra, text="Multiplicar", command=self.multiplicar_imagenes).grid(row=0, column=0, padx=5, pady=5)
+        tk.Button(frame_extra, text="Dividir", command=self.dividir_imagenes).grid(row=0, column=1, padx=5, pady=5)
 
     def abrir_imagen1(self):
         ruta_archivo = filedialog.askopenfilename()
@@ -106,20 +102,20 @@ class ProcesadorImagenesGUI:
             axs[1].axis('off')
             plt.show()
         else:
-            print("No hay imagen/es cargadas") 
+            print('Carque ambas imágenes primero.') 
 
     # Funciones para el ejercicio 1
     def sumar_imagenes(self):
         if self.imagen1 is not None and self.imagen2 is not None:
             suma_imagenes(self.imagen1, self.imagen2, 'Suma Clampeada')
         else:
-            print('No hay imagen/es cargadas')
+            print('Carque ambas imágenes primero.')
     
     def restar_imagenes(self):
         if self.imagen1 is not None and self.imagen2 is not None:
             resta_imagenes(self.imagen1, self.imagen2, 'Resta Clampeada')
         else:
-            print('No hay imagen/es cargadas')
+            print('Carque ambas imágenes primero.')
 
     # Funciones para el ejercicio 2
     def sumar_imagenes_yiq (self):
@@ -128,7 +124,7 @@ class ProcesadorImagenesGUI:
             imagen2 = RGB_to_YIQ(self.imagen2)
             suma_imagenes(imagen1, imagen2, 'Suma Clampeada YIQ')
         else:
-            print('No hay imagen/es cargadas')
+            print('Carque ambas imágenes primero.')
 
     def restar_imagenes_yiq (self):
         if self.imagen1 is not None and self.imagen2 is not None:
@@ -136,7 +132,7 @@ class ProcesadorImagenesGUI:
             imagen2 = RGB_to_YIQ(self.imagen2)
             resta_imagenes(imagen1, imagen2, 'Resta Clampeada YIQ')
         else:
-            print('No hay imagen/es cargadas')
+            print('Carque ambas imágenes primero.')
 
     # Funciones para el ejercicio 3
     def multiplicar_imagenes(self):
