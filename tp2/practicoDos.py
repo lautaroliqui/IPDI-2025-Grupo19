@@ -11,6 +11,33 @@ from matplotlib.figure import Figure
 # Codigo de Ejercicio 3
 import Complementos.ejercicio3 as ej3
 
+def RGB_to_YIQ(rgb):
+    yiq = np.zeros(rgb.shape)
+    yiq[:,:,0] = 0.229*rgb[:,:,0] + 0.587*rgb[:,:,1] + 0.114*rgb[:,:,2]
+    yiq[:,:,1] = 0.595716*rgb[:,:,0] - 0.274453*rgb[:,:,1] - 0.321263*rgb[:,:,2]
+    yiq[:,:,2] = 0.211456*rgb[:,:,0] - 0.522591*rgb[:,:,1] + 0.311135*rgb[:,:,2]
+    return yiq
+
+def suma_imagenes(img1, img2, titulo):
+    if img1.shape == img2.shape:
+        suma_clampeada = np.clip(img1.astype(np.int32) + img2.astype(np.int32), 0, 255).astype(np.uint8)
+        plt.imshow(suma_clampeada)
+        plt.title(titulo)
+        plt.axis('off')
+        plt.show()
+    else:
+        print("Las imágenes no tienen las mismas dimensiones")
+
+def resta_imagenes(img1, img2, titulo):
+    if img1.shape == img2.shape:
+        resta_clampeada = np.clip (img1.astype(np.int32) - img2.astype(np.int32), 0, 255).astype(np.uint8)
+        plt.imshow(resta_clampeada)
+        plt.title(titulo)
+        plt.axis('off')
+        plt.show()
+    else:
+        print("Las imágenes no tienen las mismas dimensiones")
+
 class ProcesadorImagenesGUI:
     def __init__(self, master):
         self.master = master
@@ -29,10 +56,18 @@ class ProcesadorImagenesGUI:
         self.btn_mostrar = tk.Button(master, text="Mostrar Imagenes", command=self.mostrar_imagenes)
         self.btn_mostrar.pack()
 
+        # Botones para el ejercicio 1
         self.btn_mostrar = tk.Button(master, text="Sumar Imagenes (mismas dimensiones)", command=self.sumar_imagenes)
         self.btn_mostrar.pack()
 
         self.btn_mostrar = tk.Button(master, text="Restar Imagenes (mismas dimensiones)", command=self.restar_imagenes)
+        self.btn_mostrar.pack()
+
+        # Botones para el ejercicio 2
+        self.btn_mostrar = tk.Button(master, text="Sumar Imagenes YIQ", command=self.sumar_imagenes_yiq)
+        self.btn_mostrar.pack()
+
+        self.btn_mostrar = tk.Button(master, text="Restar Imagenes YIQ", command=self.restar_imagenes_yiq)
         self.btn_mostrar.pack()
 
         # Botones para ejercicio 3
@@ -71,27 +106,37 @@ class ProcesadorImagenesGUI:
             axs[1].axis('off')
             plt.show()
         else:
-            print("No hay imagen/es cargada.")
-        
+            print("No hay imagen/es cargadas") 
+
+    # Funciones para el ejercicio 1
     def sumar_imagenes(self):
-        if self.imagen1.shape == self.imagen2.shape:
-            suma_clampeada = np.clip(self.imagen1.astype(np.int32) + self.imagen2.astype(np.int32), 0, 255).astype(np.uint8)
-            plt.imshow(suma_clampeada)
-            plt.title("Suma Clampeada")
-            plt.axis('off')
-            plt.show()
+        if self.imagen1 is not None and self.imagen2 is not None:
+            suma_imagenes(self.imagen1, self.imagen2, 'Suma Clampeada')
         else:
-            print("Las imágenes no tienen las mismas dimensiones")
+            print('No hay imagen/es cargadas')
     
     def restar_imagenes(self):
-        if self.imagen1.shape == self.imagen2.shape:
-            suma_clampeada = np.clip(self.imagen1.astype(np.int32) - self.imagen2.astype(np.int32), 0, 255).astype(np.uint8)
-            plt.imshow(suma_clampeada)
-            plt.title("Resta Clampeada")
-            plt.axis('off')
-            plt.show()
+        if self.imagen1 is not None and self.imagen2 is not None:
+            resta_imagenes(self.imagen1, self.imagen2, 'Resta Clampeada')
         else:
-            print("Las imágenes no tienen las mismas dimensiones")
+            print('No hay imagen/es cargadas')
+
+    # Funciones para el ejercicio 2
+    def sumar_imagenes_yiq (self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            imagen1 = RGB_to_YIQ(self.imagen1)
+            imagen2 = RGB_to_YIQ(self.imagen2)
+            suma_imagenes(imagen1, imagen2, 'Suma Clampeada YIQ')
+        else:
+            print('No hay imagen/es cargadas')
+
+    def restar_imagenes_yiq (self):
+        if self.imagen1 is not None and self.imagen2 is not None:
+            imagen1 = RGB_to_YIQ(self.imagen1)
+            imagen2 = RGB_to_YIQ(self.imagen2)
+            resta_imagenes(imagen1, imagen2, 'Resta Clampeada YIQ')
+        else:
+            print('No hay imagen/es cargadas')
 
     # Funciones para el ejercicio 3
     def multiplicar_imagenes(self):
@@ -125,6 +170,8 @@ class ProcesadorImagenesGUI:
                 print("Las imágenes deben tener las mismas dimensiones.")
         else:
             print("Cargue ambas imágenes primero.")
+
+
 
 root = tk.Tk()
 app = ProcesadorImagenesGUI(root)
